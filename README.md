@@ -10,3 +10,4 @@ Book available for purchase here: https://lets-go.alexedwards.net/sample/00.00-f
 - Go 1.18
 - go-chi/chi v5.0.7
 - go-sql-driver/mysql v1.6.0
+- alexedwards/scs v2.5.0
