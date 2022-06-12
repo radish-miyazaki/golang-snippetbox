@@ -13,13 +13,26 @@ func (app *application) routes() http.Handler {
 	mux.Use(middleware.Logger)
 	mux.Use(secureHeaders)
 
-	mux.Group(func(r chi.Router) {
-		r.Use(app.session.LoadAndSave)
+	mux.Group(func(mux chi.Router) {
+		mux.Use(noSurf)
+		mux.Use(app.session.LoadAndSave)
 
-		r.Get("/", app.home)
-		r.Get("/snippet/create", app.createSnippetForm)
-		r.Post("/snippet/create", app.createSnippet)
-		r.Get("/snippet/{id}", app.showSnippet)
+		mux.Get("/", app.home)
+
+		mux.Group(func(mux chi.Router) {
+			mux.Use(app.requireAuthentication)
+
+			mux.Get("/snippet/create", app.createSnippetForm)
+			mux.Post("/snippet/create", app.createSnippet)
+			mux.Post("/user/logout", app.logoutUser)
+		})
+
+		mux.Get("/snippet/{id}", app.showSnippet)
+
+		mux.Get("/user/signup", app.signupUserForm)
+		mux.Post("/user/signup", app.signupUser)
+		mux.Get("/user/login", app.loginUserForm)
+		mux.Post("/user/login", app.loginUser)
 	})
 
 	fileServer := http.FileServer(http.Dir("./ui/static/"))

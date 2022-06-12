@@ -9,3 +9,16 @@ CREATE TABLE snippets
 );
 -- Add an index on the created column.
 CREATE INDEX idx_snippets_created ON snippets (created);
+
+-- Create a `user` table.
+CREATE TABLE users (
+    id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    hashed_password CHAR(60) NOT NULL,
+    created DATETIME NOT null,
+    active BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+-- Add a unique constraint on the email column.
+ALTER TABLE users ADD CONSTRAINT users_uc_email UNIQUE (email);

@@ -141,8 +141,8 @@ nav a.live:after {
     background: #F7F9FA;
     border-left: 1px solid #E4E5E7;
     border-bottom: 1px solid #E4E5E7;
-    --moz-transform: rotate(45deg);
-    --webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(45deg);
+    -webkit-transform: rotate(-45deg);
 }
 
 a.button, input[type="submit"] {

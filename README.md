@@ -1,6 +1,6 @@
 ### Snippetbox
 
-This repo is unofficial sample code in LET'S GO! 1st edition (by **Alex Edwards**).
+This repo is unofficial sample code in LET'S GO! 1st edition (by **[Alex Edwards](https://www.alexedwards.net/)**).
 
 For practice purposes, it differs slightly from the book.
 
