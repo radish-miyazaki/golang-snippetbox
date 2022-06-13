@@ -1,10 +1,37 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"github.com/justinas/nosurf"
 	"net/http"
+	"snippetbox/pkg/models"
 )
+
+func (app *application) authenticate(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		exists := app.session.Exists(r.Context(), "authenticatedUserID")
+		if !exists {
+			next.ServeHTTP(w, r)
+			return
+		}
+
+		user, err := app.users.Get(app.session.GetInt(r.Context(), "authenticatedUserID"))
+		fmt.Printf("%v\n", user)
+		if errors.Is(err, models.ErrNoRecord) || !user.Active {
+			app.session.Remove(r.Context(), "authenticatedUserID")
+			next.ServeHTTP(w, r)
+			return
+		} else if err != nil {
+			app.serverError(w, err)
+			return
+		}
+
+		ctx := context.WithValue(r.Context(), contextKeyIsAuthenticated, true)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
 
 func secureHeaders(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

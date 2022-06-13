@@ -14,8 +14,9 @@ func (app *application) routes() http.Handler {
 	mux.Use(secureHeaders)
 
 	mux.Group(func(mux chi.Router) {
-		mux.Use(noSurf)
 		mux.Use(app.session.LoadAndSave)
+		mux.Use(noSurf)
+		mux.Use(app.authenticate)
 
 		mux.Get("/", app.home)
 
