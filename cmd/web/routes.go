@@ -13,6 +13,8 @@ func (app *application) routes() http.Handler {
 	mux.Use(middleware.Logger)
 	mux.Use(secureHeaders)
 
+	mux.Get("/ping", ping)
+
 	mux.Group(func(mux chi.Router) {
 		mux.Use(app.session.LoadAndSave)
 		mux.Use(noSurf)

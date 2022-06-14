@@ -10,17 +10,26 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"snippetbox/pkg/models"
 	"time"
 
 	"snippetbox/pkg/models/mysql"
 )
 
 type application struct {
-	errorLog      *log.Logger
-	infoLog       *log.Logger
-	session       *scs.SessionManager
-	snippets      *mysql.SnippetModel
-	users         *mysql.UserModel
+	errorLog *log.Logger
+	infoLog  *log.Logger
+	session  *scs.SessionManager
+	snippets interface {
+		Insert(string, string, string) (int, error)
+		Get(int) (*models.Snippet, error)
+		Latest() ([]*models.Snippet, error)
+	}
+	users interface {
+		Insert(string, string, string) error
+		Authenticate(string, string) (int, error)
+		Get(int) (*models.User, error)
+	}
 	templateCache map[string]*template.Template
 }
 
