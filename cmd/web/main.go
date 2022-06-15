@@ -32,6 +32,7 @@ type application struct {
 		ChangePassword(int, string, string) error
 	}
 	templateCache map[string]*template.Template
+	debug         bool
 }
 
 type contextKey string
@@ -53,6 +54,7 @@ func openDB(dsn string) (*sql.DB, error) {
 func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	dsn := flag.String("dsn", "root:password@/snippetbox?parseTime=true", "MYSQL data source name")
+	debug := flag.Bool("debug", false, "Enable debug mode")
 	flag.Parse()
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
@@ -81,6 +83,7 @@ func main() {
 		snippets:      &mysql.SnippetModel{DB: db},
 		users:         &mysql.UserModel{DB: db},
 		templateCache: templateCache,
+		debug:         *debug,
 	}
 
 	tlsConfig := &tls.Config{
