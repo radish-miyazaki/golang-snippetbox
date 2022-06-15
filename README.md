@@ -15,5 +15,6 @@ Book available for purchase here: https://lets-go.alexedwards.net/sample/00.00-f
 
 ### How to run
 1. run `make build` command to build MySQL image 
-2. run `go cmd/web` command to run HTTP server
-3. Visit http://localhost:4000/
+2. run query in `schema.sql` & `insert_snippets.sql` to setup database
+3. run `go cmd/web` command to run HTTP server
+4. Visit http://localhost:4000/
