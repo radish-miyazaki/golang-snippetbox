@@ -30,6 +30,8 @@ func (app *application) routes() http.Handler {
 			mux.Post("/snippet/create", app.createSnippet)
 			mux.Post("/user/logout", app.logoutUser)
 			mux.Get("/user/profile", app.userProfile)
+			mux.Get("/user/change-password", app.changePasswordForm)
+			mux.Post("/user/change-password", app.changePassword)
 		})
 
 		mux.Get("/snippet/{id}", app.showSnippet)
