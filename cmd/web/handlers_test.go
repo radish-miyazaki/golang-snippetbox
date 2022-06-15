@@ -106,3 +106,41 @@ func TestSignupUser(t *testing.T) {
 		})
 	}
 }
+
+func TestCreateSnippetForm(t *testing.T) {
+	app := newTestApplication(t)
+	ts := newTestServer(t, app.routes())
+	defer ts.Close()
+
+	t.Run("Unauthenticated", func(t *testing.T) {
+		code, headers, _ := ts.get(t, "/snippet/create")
+		if code != http.StatusSeeOther {
+			t.Errorf("want %d; got %d", http.StatusSeeOther, code)
+		}
+
+		if headers.Get("Location") != "/user/login" {
+			t.Errorf("want %s; got %s", "/user/login", headers.Get("Location"))
+		}
+	})
+
+	t.Run("Authenticated", func(t *testing.T) {
+		_, _, body := ts.get(t, "/user/login")
+		csrfToken := extractCSRFToken(t, body)
+
+		form := url.Values{}
+		form.Add("email", "alice@example.com")
+		form.Add("password", "")
+		form.Add("csrf_token", csrfToken)
+		ts.postForm(t, "/user/login", form)
+
+		code, _, body := ts.get(t, "/snippet/create")
+		if code != http.StatusOK {
+			t.Errorf("want %d; got %d", http.StatusOK, code)
+		}
+
+		formTag := `<form action="/snippet/create" method="post">`
+		if !bytes.Contains(body, []byte(formTag)) {
+			t.Errorf("want body %s to contain %q", body, formTag)
+		}
+	})
+}

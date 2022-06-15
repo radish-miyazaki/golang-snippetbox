@@ -21,6 +21,7 @@ func (app *application) routes() http.Handler {
 		mux.Use(app.authenticate)
 
 		mux.Get("/", app.home)
+		mux.Get("/about", app.about)
 
 		mux.Group(func(mux chi.Router) {
 			mux.Use(app.requireAuthentication)
