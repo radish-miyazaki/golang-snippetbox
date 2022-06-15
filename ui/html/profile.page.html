@@ -1,0 +1,23 @@
+{{ template "base" . }}
+
+{{ define "title" }}Profile{{ end }}
+
+{{ define "main" }}
+  <h2>User Profile</h2>
+  {{ with .User }}
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>{{ .Name }}</th>
+      </tr>
+      <tr>
+        <th>Email</th>
+        <th>{{ .Email }}</th>
+      </tr>
+      <tr>
+        <th>Joined</th>
+        <th>{{ humanDate .Created }}</th>
+      </tr>
+    </table>
+  {{ end }}
+{{ end }}

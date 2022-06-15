@@ -163,6 +163,20 @@ func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
+func (app *application) userProfile(w http.ResponseWriter, r *http.Request) {
+	userID := app.session.Get(r.Context(), "authenticatedUserID").(int)
+
+	user, err := app.users.Get(userID)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+
+	app.render(w, r, "profile.page.html", &templateData{
+		User: user,
+	})
+}
+
 func ping(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("OK"))
 }

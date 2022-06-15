@@ -29,6 +29,7 @@ func (app *application) routes() http.Handler {
 			mux.Get("/snippet/create", app.createSnippetForm)
 			mux.Post("/snippet/create", app.createSnippet)
 			mux.Post("/user/logout", app.logoutUser)
+			mux.Get("/user/profile", app.userProfile)
 		})
 
 		mux.Get("/snippet/{id}", app.showSnippet)
